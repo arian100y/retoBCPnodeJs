@@ -24,13 +24,9 @@ app.get("/", (req, res) => {
 });
 
 //connect to db
-mongoose.connect(
-  process.env.DB_CONNECTION,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    console.log("connected to db");
-  }
-);
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => {
+  console.log("connected to db");
+});
 
 //listen
 app.listen(process.env.PORT || 8080);
