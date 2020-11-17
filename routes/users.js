@@ -126,7 +126,7 @@ router.post("/reto", async (req, res) => {
       user = data[0];
     }
   });
-  await getData(url);
+  //await getData(url);
 
   try {
     if (user === undefined) {
@@ -143,8 +143,8 @@ router.post("/reto", async (req, res) => {
       if (user.loggedIn === true) {
         res.status(500).send();
       } else {
-        //user.loggedIn = true;
-        //await user.save();
+        user.loggedIn = true;
+        await user.save();
         res.status(200).send();
       }
     }
