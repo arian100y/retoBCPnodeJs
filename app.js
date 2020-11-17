@@ -25,16 +25,12 @@ app.get("/", (req, res) => {
 
 //connect to db
 mongoose.connect(
-  "mongodb+srv://user:password123!@cluster0.vuekx.mongodb.net/cluster0?retryWrites=true&w=majority",
-  { useNewUrlParser: true }
+  process.env.DB_CONNECTION,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  () => {
+    console.log("connected to db");
+  }
 );
-mongoose.connection
-  .once("open", function () {
-    console.log("Conection has been made!");
-  })
-  .on("error", function (error) {
-    console.log("Error is: ", error);
-  });
 
 //listen
 app.listen(process.env.PORT || 8080);
