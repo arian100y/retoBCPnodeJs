@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../Models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-require("dotenv/config");
+
 const axios = require("axios");
 
 // router.get('/',(req,res)=>{
@@ -36,62 +36,62 @@ router.get("/", async (req, res) => {
   }
 });
 //POST USERS
-router.post("/", async (req, res) => {
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    console.log(hashedPassword);
-    const user = new User({
-      username: req.body.username,
-      password: hashedPassword,
-    });
-    const savedUser = await user.save();
-    res.status(201).send();
-  } catch (err) {
-    res.json({ message: err });
-  }
+// router.post("/", async (req, res) => {
+//   try {
+//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
+//     console.log(hashedPassword);
+//     const user = new User({
+//       username: req.body.username,
+//       password: hashedPassword,
+//     });
+//     const savedUser = await user.save();
+//     res.status(201).send();
+//   } catch (err) {
+//     res.json({ message: err });
+//   }
 
-  // res.json(savedUser);
-});
-router.post("/login", async (req, res) => {
-  let user = new User();
-  await User.find({ username: req.body.username.toString() }, (error, data) => {
-    if (error) {
-      console.log(error);
-    } else {
-      user = data[0];
-    }
-  });
-  try {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      const userSign = {
-        username: req.body.username,
-        password: req.body.password,
-      };
-      console.log(userSign);
-      const accessToken = jwt.sign(userSign, process.env.ACCESS_TOKEN_SECRET);
-      res.json({ accessToken: accessToken });
-      //res.send("Success!");
-    } else {
-      res.send("Not allowed");
-    }
-  } catch {
-    res.status(500).send();
-  }
+//   // res.json(savedUser);
+// });
+// router.post("/login", async (req, res) => {
+//   let user = new User();
+//   await User.find({ username: req.body.username.toString() }, (error, data) => {
+//     if (error) {
+//       console.log(error);
+//     } else {
+//       user = data[0];
+//     }
+//   });
+//   try {
+//     if (await bcrypt.compare(req.body.password, user.password)) {
+//       const userSign = {
+//         username: req.body.username,
+//         password: req.body.password,
+//       };
+//       console.log(userSign);
+//       const accessToken = jwt.sign(userSign, process.env.ACCESS_TOKEN_SECRET);
+//       res.json({ accessToken: accessToken });
+//       //res.send("Success!");
+//     } else {
+//       res.send("Not allowed");
+//     }
+//   } catch {
+//     res.status(500).send();
+//   }
 
-  // res.json(savedUser);
-});
+//   // res.json(savedUser);
+// });
 
-function authenticateToken(req, res, nex) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+// function authenticateToken(req, res, nex) {
+//   const authHeader = req.headers["authorization"];
+//   const token = authHeader && authHeader.split(" ")[1];
 
-  if (token === null) return res.sendStatus(401);
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-}
+//   if (token === null) return res.sendStatus(401);
+//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+//     if (err) return res.sendStatus(403);
+//     req.user = user;
+//     next();
+//   });
+// }
 
 router.post("/logout", async (req, res) => {
   let user = new User();
