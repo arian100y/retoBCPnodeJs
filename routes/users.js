@@ -103,7 +103,7 @@ router.post("/logout", async (req, res) => {
     }
   });
   console.log(user);
-  user.loggedIn = !user.loggedIn;
+  user.loggedIn = false;
   await user.save();
   res.status(200).send();
 });
