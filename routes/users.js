@@ -35,63 +35,6 @@ router.get("/", async (req, res) => {
     res.json({ message: err });
   }
 });
-//POST USERS
-// router.post("/", async (req, res) => {
-//   try {
-//     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-//     console.log(hashedPassword);
-//     const user = new User({
-//       username: req.body.username,
-//       password: hashedPassword,
-//     });
-//     const savedUser = await user.save();
-//     res.status(201).send();
-//   } catch (err) {
-//     res.json({ message: err });
-//   }
-
-//   // res.json(savedUser);
-// });
-// router.post("/login", async (req, res) => {
-//   let user = new User();
-//   await User.find({ username: req.body.username.toString() }, (error, data) => {
-//     if (error) {
-//       console.log(error);
-//     } else {
-//       user = data[0];
-//     }
-//   });
-//   try {
-//     if (await bcrypt.compare(req.body.password, user.password)) {
-//       const userSign = {
-//         username: req.body.username,
-//         password: req.body.password,
-//       };
-//       console.log(userSign);
-//       const accessToken = jwt.sign(userSign, process.env.ACCESS_TOKEN_SECRET);
-//       res.json({ accessToken: accessToken });
-//       //res.send("Success!");
-//     } else {
-//       res.send("Not allowed");
-//     }
-//   } catch {
-//     res.status(500).send();
-//   }
-
-//   // res.json(savedUser);
-// });
-
-// function authenticateToken(req, res, nex) {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
-
-//   if (token === null) return res.sendStatus(401);
-//   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-//     if (err) return res.sendStatus(403);
-//     req.user = user;
-//     next();
-//   });
-// }
 
 router.post("/logout", async (req, res) => {
   let user = new User();
@@ -102,14 +45,13 @@ router.post("/logout", async (req, res) => {
       user = data[0];
     }
   });
-  console.log(user);
+
   user.loggedIn = false;
   await user.save();
   res.status(200).send();
 });
 
 const postSubs = async (url, id) => {
-  console.log("Afpasfs");
   try {
     const response = await axios.post(`${url}${id}`);
   } catch (error) {
@@ -154,16 +96,5 @@ router.post("/reto", async (req, res) => {
     res.json({ message: err });
   }
 });
-
-//SPECIFIC POST
-// router.get('/:postId', async (req,res)=>{
-//     try{
-//         console.log(req.params.postId);
-//         const post = await Post.findById(req.params.postId);
-//         res.json(post);
-//     }catch (err){
-//         res.json({message:err});
-//     }
-// })
 
 module.exports = router;
